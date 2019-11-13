@@ -5,37 +5,24 @@ import re
 from os.path import basename
 import pkg_resources
 
-from . import __constants__ as sc
-from . import fortranformat as ff
+from . import constants as sc
+from .. import fortranformat as ff
 
 
-# def spectre_test62(f):
-    # """ Lecture d'un fichier spectre synthetique de test62 """
-    # wav = []
-    # flux = []
-    # end = False
-    # prevwav = 0
-    # while not end:
-        # try:
-            # line = re.findall('([\d\s]*\.\d{2})',f.readline())
-            # wavnew = [float(w) for w in line]
-            # if(wavnew[-1] <= prevwav):
-                # end = True
-            # else:
-                # wav = np.append(wav,wavnew)
-                # prevwav = wavnew[-1]
-        # except:
-            # end = True
-    # aflux = f.readlines()
-    # for line in aflux:
-        # line = re.sub('-10\d', 'e-100', line)
-        # flux = np.append(flux, line.rstrip().split())
-    # return wav,flux
+class Spectre(object):
+    def __init__(self, wav, flux, info):
+        self.wav = wav
+        self.flux = flux
+        self.data = np.asarray([wav, flux])
+        # self.info = {'imodel': info[0],
+                     # 'inu'   : info[1]}
+        self.imodel, self.inu = info
     
     
 def spectre_test62(f):
-    """ Lecture d'un fichier spectre synthétique de test62,
-        avec le package fortranformat """
+    """Lecture d'un fichier spectre synthétique de test62,
+    avec le package fortranformat.
+    """
     
     format_wav  = ff.FortranRecordReader('(10f8.2)')
     format_flux = ff.FortranRecordReader('(6e12.5)')
@@ -48,7 +35,9 @@ def spectre_test62(f):
         wav += format_wav.read(f.readline())
     wav = np.array(wav[:npts])
     
-    f.readline() # Paramètres atmosphériques
+    test = f.readline() # Paramètres atmosphériques
+    if len(test.split()) == 6:
+        flux += format_flux.read(test)
     
     while len(flux) < npts:
         flux += format_flux.read(f.readline())
@@ -58,13 +47,12 @@ def spectre_test62(f):
     
 
 def spectre_csv(f):
-    """ Lecture d'un fichier spectre d'un fichier csv en 2 colonnes """
-    
+    """Lecture d'un fichier spectre d'un fichier csv en 2 colonnes."""
     skip = 0
     while True:
         try:    
             wav, flux = np.loadtxt(f, delimiter = ',',
-                                   skiprows = skip, unpack = True)
+                              skiprows = skip, unpack = True)
         
         except ValueError:
             # Si les première lignes ont un en-tête
@@ -73,12 +61,11 @@ def spectre_csv(f):
         else:
             break
             
-    return wav,flux
+    return wav, flux
     
 
 def spectre_tsv(f):
-    """ Lecture d'un fichier spectre en 2 colonnes """
-    
+    """Lecture d'un fichier spectre en 2 colonnes."""
     skip = 0
     while True:
         try:    
@@ -91,7 +78,7 @@ def spectre_tsv(f):
         else:
             break
             
-    return wav,flux
+    return wav, flux
     
 
 # def spectre_tsv3(f):
@@ -115,8 +102,9 @@ def spectre_tsv(f):
     
     
 def spectre_tsv3(f):
-    """ Lecture d'un fichier spectre en 3 colonnes
-    (avec incertitudes sur flux)"""
+    """Lecture d'un fichier spectre en 3 colonnes
+    (avec incertitudes sur flux).
+    """
     
     skip = 0
     while True:
@@ -130,11 +118,11 @@ def spectre_tsv3(f):
         else:
             break
             
-    return wav,flux
+    return wav, flux
     
     
 def spectre_sdss_fits(f):
-    """ Lecture d'un fichier spectre .fits du SDSS """
+    """Lecture d'un fichier spectre .fits du SDSS."""
     hdul = fits.open(f)
     
     if 'SDSS' in hdul[0].header['TELESCOP']:
@@ -158,7 +146,7 @@ def spectre_sdss_fits(f):
     
 
 def spectre_etrange(f):
-    """ Lecture d'un fichier spectre Fortran imprime en 5 ou 7 colonnes """
+    """Lecture d'un fichier spectre Fortran imprime en 5 ou 7 colonnes."""
     end = False
     while not end:
         try:
@@ -174,7 +162,7 @@ def spectre_etrange(f):
                 flux = np.append(flux, line.rstrip().split())
                 
     wav, flux = np.array(wav), np.array(flux)
-    return wav,flux
+    return wav, flux
     
 
 def spec_info(inputfile,imodel,inu,teff):
@@ -192,9 +180,10 @@ def spec_info(inputfile,imodel,inu,teff):
         
         
 def load_spectre(inputfile):
-    """ Trouve le format du fichier inputfile, puis utilise la bonne méthode
-        pour lire le fichier, et retourne le spectre wav, flux, ainsi que les
-        flags imodel et inu """
+    """Trouve le format du fichier inputfile, puis utilise la bonne méthode
+    pour lire le fichier, et retourne le spectre wav, flux, ainsi que les
+    flags imodel et inu.
+    """
     
     if inputfile.endswith('fits'):
         wav, flux = spectre_sdss_fits(inputfile)
@@ -218,7 +207,7 @@ def load_spectre(inputfile):
             wav, flux = spectre_test62(f) 
             imodel = True
             inu = True
-        elif(len(test.split(','))==2): # csv
+        elif(len(test.split(','))==2 or len(test.split(','))==4): # csv
             wav, flux = spectre_csv(f)
             imodel = False
             inu = False
@@ -235,17 +224,20 @@ def load_spectre(inputfile):
             imodel = False
             inu = False
         else:
-            print('Erreur dans plot_spectre')
-            print('Format inconnu pour '+inputfile)
+            # print('Erreur dans plot_spectre')
+            # print('Format inconnu pour '+inputfile)
+            raise ValueError('Format inconnu pour '+inputfile)
         f.close()
         # flux = np.array([float(ff) for ff in flux])
         
-    return wav, flux, (imodel, inu)
+    # return wav, flux, (imodel, inu)
+    return Spectre(wav, flux, (imodel, inu))
 
         
 def normalisation(wav, flux):
-    """ Normalisation du spectre à la valeur maximale du flux, 
-        pour avoir tout les spectres sous le même ordre de grandeur """
+    """Normalisation du spectre à la valeur maximale du flux, 
+    pour avoir tout les spectres sous le même ordre de grandeur.
+    """
     
     return flux / flux.max() # flux maximal = 1
 
@@ -254,8 +246,9 @@ def normalisation(wav, flux):
     
     
 def load_lines():
-    """ Lecture de la liste de raies, et retourne un dict avec l'ion en clé
-        et la liste (array) de raies de cet ion en valeur """
+    """Lecture de la liste de raies, et retourne un dict avec l'ion en clé
+    et la liste (array) de raies de cet ion en valeur.
+    """
     
     linelist = pkg_resources.resource_stream(__name__, 'lines.csv')
     linedict = {}
@@ -277,14 +270,15 @@ def load_lines():
         
 
 def plot_spectre(filelist, figname = None, IDlines = None):
-    """ Trace les spectres dans la liste filelist
-        Si figname = None, retourne une fenêtre interactive
-        Si un string est donné, enregistre la figure sous figname
-        Si IDlines = None, ne met pas l'identification des raies sur la figure
-        Si IDlines = str, on transforme comme IDlines = [str]
-        Si IDlines = list, il faut que les items dans la liste soient le
-        symbole atomique d'un élément (ex. Ca pour calcium)
-        Si IDlines = 'All', alors on trace toutes les raies (les 200+, à éviter
+    """Trace les spectres dans la liste filelist.
+    
+    Si figname = None, retourne une fenêtre interactive
+    Si un string est donné, enregistre la figure sous figname
+    Si IDlines = None, ne met pas l'identification des raies sur la figure
+    Si IDlines = str, on transforme comme IDlines = [str]
+    Si IDlines = list, il faut que les items dans la liste soient le
+    symbole atomique d'un élément (ex. Ca pour calcium)
+    Si IDlines = 'All', alors on trace toutes les raies (les 200+, à éviter)
     """
         
     if not isinstance(filelist, list):
@@ -300,7 +294,11 @@ def plot_spectre(filelist, figname = None, IDlines = None):
     for i,inputfile in enumerate(filelist):
     
         # On lit le spectre
-        wav, flux, (imodel, inu) = load_spectre(inputfile)
+        # wav, flux, (imodel, inu) = load_spectre(inputfile)
+        spectre = load_spectre(inputfile)
+        wav, flux = spectre.data
+        imodel = spectre.imodel
+        inu = spectre.inu
         
         # Detection des unites
         if np.mean(wav) > 1e10:
@@ -313,7 +311,7 @@ def plot_spectre(filelist, figname = None, IDlines = None):
             flux *= wav*wav/sc.c_ang
 
         teff = (-np.trapz(flux,x=sc.c_ang/wav)/sc.sigma*4.0*np.pi)**0.25
-        spec_info(inputfile,imodel,inu,teff)
+        # spec_info(inputfile,imodel,inu,teff)
         
         flux = normalisation(wav, flux)
         ax.plot(wav, flux, label = basename(inputfile))
@@ -368,6 +366,3 @@ def plot_spectre(filelist, figname = None, IDlines = None):
         plt.show(fig)
     else:
         fig.savefig(figname)
-    plt.close(fig)
-        
-
