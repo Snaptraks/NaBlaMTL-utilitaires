@@ -1,10 +1,9 @@
 """
-Utilitaires Python pour l'analyse et la visualisation de données relatives aux
-étoiles naines blanches.
+Python utility for data analysis and visualization of related to white dwarfs.
 
-Package créé par Simon Blouin en collaboration avec François Hardy
+Package created Simon Blouin in collaboration with François Hardy.
 """
 
-from .spectres import plot_spectre, load_spectre, load_lines
-from .modeles import plot_modele, load_modele
-from .get_MWDD import get_MWDD_info, get_MWDD_spectra
+from .spectrums import plot_spectrum, load_spectrum, load_lines
+from .models import plot_model, load_model
+from .MWDD import get_MWDD_info, get_MWDD_spectra
