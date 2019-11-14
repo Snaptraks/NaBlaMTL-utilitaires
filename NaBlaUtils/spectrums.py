@@ -303,7 +303,7 @@ def plot_spectrum(filelist, figname=None, IDlines=None):
 
         teff = (-np.trapz(flux, x=sc.c_ang / wav) /
                 sc.sigma * 4.0 * np.pi)**0.25
-        
+
         flux = normalize(wav, flux)
         ax.plot(wav, flux, label=basename(inputfile))
 
@@ -360,3 +360,5 @@ def plot_spectrum(filelist, figname=None, IDlines=None):
 
     else:
         fig.savefig(figname)
+
+    plt.close()

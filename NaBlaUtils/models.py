@@ -274,4 +274,4 @@ def plot_model(filelist, figname=None, params=['T', 'P']):
     else:
         fig.savefig(figname)
 
-    plt.close(fig)
+    plt.close()
