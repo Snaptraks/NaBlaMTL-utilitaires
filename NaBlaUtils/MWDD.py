@@ -33,8 +33,7 @@ def get_MWDD_wdid(name):
 
 
 def get_MWDD_spectra(name):
-    """
-    Return a dict contaning all the spectra in the MWDD of the
+    """Return a dict contaning all the spectra in the MWDD of the
     requested star.
     """
     output = {}

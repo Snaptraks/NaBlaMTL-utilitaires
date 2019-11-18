@@ -3,6 +3,9 @@ from cycler import cycler
 
 
 def supermongo():
+    """Context manager to emulate the style of the SuperMongo plotting
+    library. Font is still not quite there yet.
+    """
     return rc_context({
         'text.usetex' : True,
 

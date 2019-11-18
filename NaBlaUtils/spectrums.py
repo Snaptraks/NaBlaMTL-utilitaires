@@ -20,8 +20,7 @@ class Spectrum(object):
 
 
 def spectrum_test62(f):
-    """
-    Read a synthetic spectrum from the test62 code
+    """Read a synthetic spectrum from the test62 code
     with the fortranformat package.
     """
     format_wav = ff.FortranRecordReader('(10f8.2)')
@@ -84,9 +83,7 @@ def spectrum_tsv(f):
 
 
 def spectrum_tsv3(f):
-    """
-    Read a spectrum in a 3 column file (with flux uncertainties).
-    """
+    """Read a spectrum in a 3 column file (with flux uncertainties)."""
     skip = 0
     while True:
         try:
@@ -162,8 +159,7 @@ def spectrum_info(inputfile, imodel, inu, teff):
 
 
 def load_spectrum(inputfile):
-    """
-    Find the file format of inputfile, then use the right function to read
+    """Find the file format of inputfile, then use the right function to read
     the file, and return the spectrum (wav, flux) and the imodel and inu flags.
     """
     if inputfile.endswith('fits'):
@@ -222,8 +218,7 @@ def load_spectrum(inputfile):
 
 
 def normalize(wav, flux):
-    """
-    Normalize the spectrum at the maximal value of the flux, to have all
+    """Normalize the spectrum at the maximal value of the flux, to have all
     spectra at the same order of magnitude.
     """
     return flux / flux.max()  # maximum flux = 1
@@ -233,8 +228,7 @@ def normalize(wav, flux):
 
 
 def load_lines():
-    """
-    Read the line list, and return a dict with the ions as keys and
+    """Read the line list, and return a dict with the ions as keys and
     an array of the lines of the ions as the values.
     """
     linelist = pkg_resources.resource_stream(__name__, 'lines.csv')
@@ -258,8 +252,7 @@ def load_lines():
 
 
 def plot_spectrum(filelist, figname=None, IDlines=None):
-    """
-    Plot the spectra in the filelist.
+    """Plot the spectra in the filelist.
 
     If figname is None, open the figure in interactive window.
     If figname is a string, save the figure under figname.

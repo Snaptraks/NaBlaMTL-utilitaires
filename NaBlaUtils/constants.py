@@ -1,5 +1,4 @@
-"""
-Scientific constants form scipy.constants, but converted in CGS units
+"""Scientific constants form scipy.constants, but converted in CGS units
 (centimetre, gram, second, erg, dyne, etc.)
 
 Useful reference: http://www.astro.wisc.edu/~dolan/constants.html

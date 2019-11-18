@@ -152,8 +152,7 @@ def model_test62(f):
 
 
 def load_model(inputfile):
-    """
-    Determine the type of model (TLUSTY, test62, geras) and
+    """Determine the type of model (TLUSTY, test62, geras) and
     return the model's dict.
     """
 
@@ -178,9 +177,8 @@ def load_model(inputfile):
 
 
 def plot_model(filelist, figname=None, params=['T', 'P']):
-    """
-    Plot the structure of the models in filelist, for the parameters in params.
-
+    """Plot the structure of the models in filelist, for the parameters
+    in params.
     If figname is None, open in an interactive window.
     If a str is given, save the figure under figname.
 
