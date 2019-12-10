@@ -45,7 +45,7 @@ def get_MWDD_spectra(name):
     if spectlist.status_code == 200:
         f = spectlist.content.decode('utf-8')
     else:
-        return None
+        return output
 
     f = f.replace(' ', '%20').replace(r'\n', ' ').replace("'", '')
     listspec = f.split()
