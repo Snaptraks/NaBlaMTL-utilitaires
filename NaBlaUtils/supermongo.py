@@ -5,6 +5,14 @@ from cycler import cycler
 def supermongo():
     """Context manager to emulate the style of the SuperMongo plotting
     library. Font is still not quite there yet.
+
+    Usage:
+    x = <data>
+    y = <other data>
+    with supermongo():
+        fig, ax = plt.subplots()
+        ax.plot(x, y)
+        fig.savefig('filename')
     """
     return rc_context({
         'axes.facecolor': 'none',
