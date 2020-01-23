@@ -20,13 +20,13 @@ def supermongo():
         'axes.labelsize': 'large',
         'axes.linewidth': 0.6,
         'axes.prop_cycle': cycler(color=[
-            '#FF0000',
-            '#00FF00',
-            '#0000FF',
-            '#00FFFF',
-            '#FF00FF',
-            '#FFFF00',
-            '#000000',
+            '#FF0000',  # red
+            '#00FF00',  # green
+            '#0000FF',  # blue
+            '#00FFFF',  # cyan
+            '#FF00FF',  # magenta
+            '#FFFF00',  # yellow
+            '#000000',  # black
             ]),
 
         'backend': 'GTK3AGG',
@@ -37,8 +37,8 @@ def supermongo():
         'figure.figsize': (6, 6),
 
         'font.family': 'serif',
-        'font.stretch': 'extra-expanded',
         'font.size' : 12,
+        'font.stretch': 'extra-expanded',  # not implemented in matplotlib
         'font.weight': 'bold',
 
         'legend.frameon': False,
