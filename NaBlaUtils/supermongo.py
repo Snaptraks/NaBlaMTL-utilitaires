@@ -16,8 +16,9 @@ def supermongo():
     """
     return rc_context({
         'axes.facecolor': 'none',
+        'axes.labelpad': 18.0,
         'axes.labelsize': 'large',
-        'axes.linewidth': 0.7,
+        'axes.linewidth': 0.6,
         'axes.prop_cycle': cycler(color=[
             '#FF0000',
             '#00FF00',
@@ -36,8 +37,8 @@ def supermongo():
         'figure.figsize': (6, 6),
 
         'font.family': 'serif',
-        'font.size' : 11,
         'font.stretch': 'extra-expanded',
+        'font.size' : 12,
         'font.weight': 'bold',
 
         'legend.frameon': False,
@@ -47,7 +48,7 @@ def supermongo():
         'legend.numpoints': 1,
         'legend.scatterpoints': 1,
 
-        'lines.linewidth': 0.8,
+        'lines.linewidth': 0.5,
         'lines.markeredgewidth': 0.2,
         'lines.markersize': 4,
 
@@ -64,23 +65,21 @@ def supermongo():
         'xtick.top': True,
         'xtick.direction': 'in',
         'xtick.labelsize': 'medium',
-        'xtick.major.pad': 6,
-        'xtick.major.size': 8,
-        'xtick.major.width': 1,
-        'xtick.minor.pad': 6,
-        'xtick.minor.size': 3,
+        'xtick.major.pad': 5,
+        'xtick.major.size': 5,
+        'xtick.major.width': 0.6,
+        'xtick.minor.size': 2,
         'xtick.minor.visible': True,
-        'xtick.minor.width': 1,
+        'xtick.minor.width': 0.6,
 
         'ytick.left': True,
         'ytick.right': True,
         'ytick.direction': 'in',
         'ytick.labelsize': 'medium',
-        'ytick.major.pad': 6,
-        'ytick.major.size': 8,
-        'ytick.major.width': 1,
-        'ytick.minor.pad': 6,
-        'ytick.minor.size': 3,
+        'ytick.major.pad': 5,
+        'ytick.major.size': 5,
+        'ytick.major.width': 0.6,
+        'ytick.minor.size': 2,
         'ytick.minor.visible': True,
-        'ytick.minor.width': 1,
+        'ytick.minor.width': 0.6,
         })
